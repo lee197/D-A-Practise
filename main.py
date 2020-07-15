@@ -34,5 +34,7 @@ class Solution:
 
 solution = Solution([1,2,3,4,8,9,10,79])
 print(solution.findRanges())
+# time: O(n)
+# space: O(n) in worst case 
   
 
