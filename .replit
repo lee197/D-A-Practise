@@ -1,2 +1,2 @@
 language = "python3"
-run = "echo hello word"
+run = "python3 GRAPH/bfs.py"
