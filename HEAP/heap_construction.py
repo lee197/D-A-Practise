@@ -2,7 +2,6 @@ class Heap:
 
   def __init__(self, arr):
     self.arr = []
-    self.arr.append(-1)
     for i in range(len(arr)):
       self.arr.append(arr[i])
     self.count = len(arr)
@@ -21,23 +20,26 @@ class Heap:
     self.__shiftUp(self.count)
 
   def remove(self):
-    self.arr[1], self.arr[- 1] = self.arr[- 1], self.arr[1]
+    self.arr[0], self.arr[- 1] = self.arr[- 1], self.arr[0]
     val = self.arr.pop(-1)
     self.count -= 1
-    self.__shiftDown(1)
+    self.__shiftDown(0)
     return val
     
   def __shiftUp(self, k):
-    while k > 1 and self.arr[int(k/2)] < self.arr[k]:
-      self.arr[k/2], self.arr[k] = self.arr[k], self.arr[k/2]
+    # Find the int(k/2) parent node and compare
+    while k > 0 and self.arr[int(k/2)] < self.arr[k - 1]:
+      self.arr[int(k/2)], self.arr[k - 1] = self.arr[k - 1], self.arr[int(k/2)]
       k /= 2
+      k = int(k)
 
   def __shiftDown(self, k):
-    
-    while 2*k <= self.count:
+    while 2*k <= self.count - 1:
       j = 2*k
+      # Compare the child nodes and find the larger one
       if j + 1 <= self.count and self.arr[j+1] > self.arr[j]:
         j += 1
+      # Compare the lager node to the parent node
       if self.arr[k] >= self.arr[j]:
         break
       self.arr[k], self.arr[j] = self.arr[j], self.arr[k]
