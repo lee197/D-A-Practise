@@ -9,10 +9,10 @@ class Heap:
     for i in range(int(self.count/2), 0, -1):
       self.__shiftDown(i)
 
-  def isEmpty():
+  def isEmpty(self):
     return self.count == 0
   
-  def size():
+  def size(self):
     return self.count
 
   def add(self, val):
@@ -56,5 +56,4 @@ heap.add(20)
 print("After added: " + str(heap.arr))
 
 heap.remove()
-
 print("After removed: " + str(heap.arr))
