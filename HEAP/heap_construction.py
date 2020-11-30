@@ -27,11 +27,10 @@ class Heap:
     return val
     
   def __shiftUp(self, k):
-    # Find the int(k/2) parent node and compare
+    # Find the int(k/2) parent node and comapre
     while k > 0 and self.arr[int(k/2)] < self.arr[k - 1]:
       self.arr[int(k/2)], self.arr[k - 1] = self.arr[k - 1], self.arr[int(k/2)]
-      k /= 2
-      k = int(k)
+      k = int(k/2)
 
   def __shiftDown(self, k):
     while 2*k <= self.count - 1:
