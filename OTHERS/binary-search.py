@@ -3,7 +3,7 @@ class BinarySearch:
     self.arr = arr
     self.count = len(arr)
 
-  def iterativeBinarySearch(self, target):
+  def iterative_binary_search(self, target):
     s = 0
     e = self.count - 1
 
@@ -18,7 +18,7 @@ class BinarySearch:
 
     return -1
 
-  def recursionBinarySearch(self, target):
+  def recursion_binary_search(self, target):
     s = 0
     e = self.count - 1
     return self.__recursionBinarySearch(s, e, target)
