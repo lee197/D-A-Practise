@@ -1,6 +1,6 @@
 # A string s is called good if there are no two different characters in s that have the same frequency.
 # Given a string s, return the minimum number of characters you need to delete to make s good.
-# The frequency of a character in a string is the number of times it appears in the string. 
+# The frequency of a character in a string is the number of times it appears in the string.
 # For example, in the string "aab", the frequency of 'a' is 2, while the frequency of 'b' is 1.
 
 # Example 1:
@@ -29,18 +29,20 @@
 # s contains only lowercase English letters.
 from collections import Counter
 
-class Solution1: 
-  def minDeletion(self, s):
-    cnt = Counter(s)
-    used = set()
-    res = 0
 
-    for char, freq in cnt.items():
-      while freq in used:
-        freq -= 1
-        res += 1
-      used.add(freq)
-    return res
+class Solution1:
+    def minDeletion(self, s):
+        cnt = Counter(s)
+        used = set()
+        res = 0
+
+        for char, freq in cnt.items():
+            while freq in used:
+                freq -= 1
+                res += 1
+            used.add(freq)
+        return res
+
 
 solution = Solution1()
 sampleS1 = "ceabaacb"
@@ -51,8 +53,7 @@ print(solution.minDeletion(sampleS1))
 print(solution.minDeletion(sampleS2))
 print(solution.minDeletion(sampleS3))
 
-
-# Given a string, what is the minimum number of adjacent swaps required to convert a string into a palindrome. 
+# Given a string, what is the minimum number of adjacent swaps required to convert a string into a palindrome.
 # If not possible, return -1.
 
 # Example 1:
@@ -79,42 +80,42 @@ print(solution.minDeletion(sampleS3))
 
 # PLEASE NOTE IT'S ADJACENT swaps
 
+
 class Solution2:
+    def isValidPalindrome(self, s):
+        cnt = Counter(s)
+        return len([char for char, freq in cnt.items() if freq % 2]) <= 1
 
-  def isValidPalindrome(self, s):
-    cnt = Counter(s)
-    return len([char for char, freq in cnt.items() if freq % 2]) <= 1
+    def min_swaps(self, s):
+
+        if not self.isValidPalindrome(s):
+            return -1
+
+        s = list(s)
+        f = 0
+        b = len(s) - 1
+        res = 0
+
+        while b > f:
+            if s[b] != s[f]:
+                mid = b
+                while mid > f and s[f] != s[mid]:
+                    mid -= 1
+
+                if mid == f:
+                    s[mid], s[mid + 1] = s[mid + 1], s[mid]
+                    res += 1
+                    continue
+
+                for i in range(mid, b):
+                    s[i], s[i + 1] = s[i + 1], s[i]
+                    res += 1
+
+            b -= 1
+            f += 1
+        return res
 
 
-  def min_swaps(self, s):
-
-    if not self.isValidPalindrome(s):
-      return -1
-
-    s = list(s)
-    f = 0 
-    b = len(s) - 1
-    res = 0
-
-    while b > f:
-      if s[b] != s[f]:
-        mid = b
-        while mid > f and s[f] != s[mid]: 
-          mid -= 1
-
-        if mid == f:
-          s[mid], s[mid + 1] = s[mid + 1], s[mid]
-          res += 1
-          continue
-
-        for i in range(mid, b):
-          s[i], s[i + 1] = s[i + 1], s[i]
-          res += 1
-
-      b -= 1
-      f += 1
-    return res
-    
 solution = Solution2()
 
 print(solution.min_swaps("mamad") == 3)
@@ -147,19 +148,21 @@ print(solution.min_swaps("ntiin") == 1)
 
 # The main idea throughout the algorithm is that - Every time I meet a different number in the reverse-sorted array, I have to count how many numbers came before it. This represents the number of steps that was taken to reduce these numbers to the current number
 
-class Solution3: 
-  def reducing_steps(self, piles):
-    if len(piles) == 1:
-      return 0
 
-    piles = sorted(piles, reverse = True)
-    i = 1
-    res = 0
-    while i < len(piles):
-      if piles[i-1] != piles[i]:
-        res += i
-      i += 1
-    return res
+class Solution3:
+    def reducing_steps(self, piles):
+        if len(piles) == 1:
+            return 0
+
+        piles = sorted(piles, reverse=True)
+        i = 1
+        res = 0
+        while i < len(piles):
+            if piles[i - 1] != piles[i]:
+                res += i
+            i += 1
+        return res
+
 
 solution = Solution3()
 print(solution.reducing_steps([1, 1, 2, 2, 2, 3, 3, 3, 4, 4]) == 15)
@@ -167,7 +170,7 @@ print(solution.reducing_steps([1, 1, 2, 2, 2, 3, 3, 3, 4, 4]) == 15)
 print(solution.reducing_steps([5, 2, 1]) == 3)
 print(solution.reducing_steps([5, 2, 1, 4, 4, 8, 8]) == 16)
 
-# Write a function that, given an array A of N integers, returns the lagest integer K > 0 such that both values K and -K exist in array A. 
+# Write a function that, given an array A of N integers, returns the lagest integer K > 0 such that both values K and -K exist in array A.
 # If there is no such integer, the function should return 0.
 
 # Example 1:
@@ -191,35 +194,36 @@ print(solution.reducing_steps([5, 2, 1, 4, 4, 8, 8]) == 16)
 # 3)left++, if left's absolute value is greater than right's value
 
 # Extra Space O(n)
-# Use an Array/HashMap to keep the occurences of the element, save the absolute value in the array/hashmap. 
+# Use an Array/HashMap to keep the occurences of the element, save the absolute value in the array/hashmap.
 # whenever you already have your absolute value in the map, compare it with the ans variable and take the maximum out of the two.
 
-class Solution4:
-  def find_largest(self, arr):
-    arr = sorted(arr)
-    f = 0 
-    b = len(arr) - 1
 
-    while f < b:
-      if abs(arr[f]) == arr[b]:
-        return arr[b]
-      elif arr[b] > abs(arr[f]):
-        b -= 1
-      else:
-        f += 1
-    return 0
+class Solution4:
+    def find_largest(self, arr):
+        arr = sorted(arr)
+        f = 0
+        b = len(arr) - 1
+
+        while f < b:
+            if abs(arr[f]) == arr[b]:
+                return arr[b]
+            elif arr[b] > abs(arr[f]):
+                b -= 1
+            else:
+                f += 1
+        return 0
+
 
 solution = Solution4()
 print(solution.find_largest([3, 2, -2, 5, -3]) == 3)
 print(solution.find_largest([1, 2, 3, -4, -5]) == 0)
-      
+
 # You are given an array of strings arr. A string s is formed by the concatenation of a subsequence of arr that has unique characters.
 
 # Return the maximum possible length of s.
 
 # A subsequence is an array that can be derived from another array by deleting some or no elements without changing the order of the remaining elements.
 
- 
 # Example 1:
 
 # Input: arr = ["un","iq","ue"]
@@ -242,7 +246,6 @@ print(solution.find_largest([1, 2, 3, -4, -5]) == 0)
 # Input: arr = ["abcdefghijklmnopqrstuvwxyz"]
 # Output: 26
 # Explanation: The only string in arr has all 26 characters.
- 
 
 # Constraints:
 
@@ -266,3 +269,105 @@ print(solution.find_largest([1, 2, 3, -4, -5]) == 0)
 # If not, we append this new combination to result.
 
 # return the maximum length from all combinations.
+
+
+class Solution5:
+    def len_concatenation(self, arr):
+        def is_unique(s):
+            cnt = Counter(s)
+            if len(cnt) != len(s):
+                return False
+            else:
+                return True
+
+        res = 0
+        arr.append("")
+
+        for i in range(0, len(arr)):
+            if len(set(arr[i])) < len(arr[i]): continue
+            for j in range(i + 1, len(arr)):
+                concat_str = arr[i] + arr[j]
+                if is_unique(concat_str) and len(concat_str) > res:
+                    res = len(concat_str)
+        return res
+
+
+solution = Solution5()
+
+print(solution.len_concatenation(["cha", "r", "act", "ers"]) == 6)
+print(solution.len_concatenation(["un", "iq", "ue"]) == 4)
+print(solution.len_concatenation(["un", "iq"]) == 4)
+
+print(solution.len_concatenation(["abcdefghijklmnopqrstuvwxyz"]) == 26)
+
+# Given an integer n, return any array containing n unique integers such that they add up to 0.
+
+# Example 1:
+
+# Input: n = 5
+# Output: [-7,-1,1,3,4]
+# Explanation: These arrays also are accepted [-5,-1,1,2,3] , [-3,-1,2,-2,4].
+# Example 2:
+
+# Input: n = 3
+# Output: [-1,0,1]
+# Example 3:
+
+# Input: n = 1
+# Output: [0]
+
+# Constraints:
+
+# 1 <= n <= 1000
+
+# Intuition
+# Naive idea
+# n = 1, [0]
+# n = 2, [-1, 1]
+
+# Now write more based on this
+# n = 3, [-2, 0, 2]
+# n = 4, [-3, -1, 1, 3]
+# n = 5, [-4, -2, 0, 2, 4]
+
+# It spreads like the wave.
+
+# Explanation
+# Find the rule
+# A[i] = i * 2 - n + 1
+
+# Math Observation
+# @zzg_zzm helps explain in math.
+
+# Actually, this rule could be derived from constructing an arithmetic sequence.
+
+# (Note that any arithmetic sequence must have unique values if the common delta is non-zero)
+
+# We need the sequence sum, so that
+
+# (a[0] + a[n-1]) * n / 2 = 0, which means a[0] + a[n-1] = 0.
+
+# Note that a[n-1] - a[0] = (n-1) * delta, which is -2 * a[0],
+
+# so we simply set delta = 2, a[0] = 1 - n
+
+# Note
+# It's not bad to sum up 1 + 2 + 3 + ... + (N - 1).
+# Personally I don't really like it much.
+# What is the possible problem of this approach?
+# It doesn't work if N goes up to 10^5
+
+
+# Complexity
+# Time O(N)
+# Space O(N)
+class Solution5:
+    def sumZero(self, n):
+        return list(range(1 - n, n, 2))
+
+
+solution = Solution5()
+print(solution.sumZero(6))
+print(solution.sumZero(5))
+print(solution.sumZero(1))
+
