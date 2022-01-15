@@ -1,2 +1,2 @@
 language = "python3"
-run = "python3 MS/Good_String.py"
+run = "python3 Interview/MS.py"

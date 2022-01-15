@@ -83,14 +83,8 @@ class Solution2:
 
   def isValidPalindrome(self, s):
     cnt = Counter(s)
-    isValidCounter = 0
-    for item, freq in cnt.items(): 
-      if freq % 2 != 0:
-        isValidCounter += 1
-    if isValidCounter > 1:
-      return False
-    else:
-      return True
+    return len([char for char, freq in cnt.items() if freq % 2]) <= 1
+
 
   def min_swaps(self, s):
 
@@ -127,3 +121,148 @@ print(solution.min_swaps("mamad") == 3)
 print(solution.min_swaps("asdgfr") == -1)
 print(solution.min_swaps("aabb") == 2)
 print(solution.min_swaps("ntiin") == 1)
+
+# Alexa is given n piles of equal or unequal heights. In one step, Alexa can remove any number of boxes from the pile which has the maximum height and try to make it equal to the one which is just lower than the maximum height of the stack. Determine the minimum number of steps required to make all of the piles equal in height.
+
+# Example 1:
+
+# Input: piles = [5, 2, 1]
+# Output: 3
+# Explanation:
+# Step 1: reducing 5 -> 2 [2, 2, 1]
+# Step 2: reducing 2 -> 1 [2, 1, 1]
+# Step 3: reducing 2 -> 1 [1, 1, 1]
+# So final number of steps required is 3.
+
+# Let's take an example.
+# Input  : [1, 1, 2, 2, 2, 3, 3, 3, 4, 4]
+# Output : 15
+# After sorting in reverse, we have...
+# [4, 4, 3, 3, 3, 2, 2, 2, 1] --> (2 steps to transform the 4's) --> The 3's must wait for 2 numbers before it to finish their reduction
+# [3, 3, 3, 3, 3, 2, 2, 2, 1] --> (5 steps to transform the 3's) --> The 2's must wait for 5 numbers before it to finish their reduction
+# [2, 2, 2, 2, 2, 2, 2, 2, 1] --> (8 steps to transform the 2's) --> The 1's must wait for 8 numbers before it to finish their reduction
+# [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+
+# Why did we sort in reverse? Because we want to process the maximum / largest number(s) first, which is what the question wants. At each step, we can only reduce the largest number(s) to the value of the 2nd-largest number(s)
+
+# The main idea throughout the algorithm is that - Every time I meet a different number in the reverse-sorted array, I have to count how many numbers came before it. This represents the number of steps that was taken to reduce these numbers to the current number
+
+class Solution3: 
+  def reducing_steps(self, piles):
+    if len(piles) == 1:
+      return 0
+
+    piles = sorted(piles, reverse = True)
+    i = 1
+    res = 0
+    while i < len(piles):
+      if piles[i-1] != piles[i]:
+        res += i
+      i += 1
+    return res
+
+solution = Solution3()
+print(solution.reducing_steps([1, 1, 2, 2, 2, 3, 3, 3, 4, 4]) == 15)
+
+print(solution.reducing_steps([5, 2, 1]) == 3)
+print(solution.reducing_steps([5, 2, 1, 4, 4, 8, 8]) == 16)
+
+# Write a function that, given an array A of N integers, returns the lagest integer K > 0 such that both values K and -K exist in array A. 
+# If there is no such integer, the function should return 0.
+
+# Example 1:
+
+# Input: [3, 2, -2, 5, -3]
+# Output: 3
+# Example 2:
+
+# Input: [1, 2, 3, -4]
+# Output: 0
+
+# Approaches:
+
+# Sorting + Two Pointers O(nlogn)
+# Array: [3,2,-2,5,-3]
+# After Sorting:[-3,-2,2,3,5]
+# Keep two pointers on the 0th and the last position respectively,
+# while(left<right) // To avoid zero's case
+# 1)if the absolute values match, return the value
+# 2) right--, if right's absolute value is greater than left's value
+# 3)left++, if left's absolute value is greater than right's value
+
+# Extra Space O(n)
+# Use an Array/HashMap to keep the occurences of the element, save the absolute value in the array/hashmap. 
+# whenever you already have your absolute value in the map, compare it with the ans variable and take the maximum out of the two.
+
+class Solution4:
+  def find_largest(self, arr):
+    arr = sorted(arr)
+    f = 0 
+    b = len(arr) - 1
+
+    while f < b:
+      if abs(arr[f]) == arr[b]:
+        return arr[b]
+      elif arr[b] > abs(arr[f]):
+        b -= 1
+      else:
+        f += 1
+    return 0
+
+solution = Solution4()
+print(solution.find_largest([3, 2, -2, 5, -3]) == 3)
+print(solution.find_largest([1, 2, 3, -4, -5]) == 0)
+      
+# You are given an array of strings arr. A string s is formed by the concatenation of a subsequence of arr that has unique characters.
+
+# Return the maximum possible length of s.
+
+# A subsequence is an array that can be derived from another array by deleting some or no elements without changing the order of the remaining elements.
+
+ 
+# Example 1:
+
+# Input: arr = ["un","iq","ue"]
+# Output: 4
+# Explanation: All the valid concatenations are:
+# - ""
+# - "un"
+# - "iq"
+# - "ue"
+# - "uniq" ("un" + "iq")
+# - "ique" ("iq" + "ue")
+# Maximum length is 4.
+# Example 2:
+
+# Input: arr = ["cha","r","act","ers"]
+# Output: 6
+# Explanation: Possible longest valid concatenations are "chaers" ("cha" + "ers") and "acters" ("act" + "ers").
+# Example 3:
+
+# Input: arr = ["abcdefghijklmnopqrstuvwxyz"]
+# Output: 26
+# Explanation: The only string in arr has all 26 characters.
+ 
+
+# Constraints:
+
+# 1 <= arr.length <= 16
+# 1 <= arr[i].length <= 26
+# arr[i] contains only lowercase English letters.
+
+# Explanation
+# Initial the result res to include the case of empty string "".
+# res include all possible combinations we find during we iterate the input.
+
+# Itearte the the input strings,
+# but skip the word that have duplicate characters.
+# The examples is kind of misleading,
+# but the input string can have duplicate characters,
+# no need to considerate these strings.
+
+# For each string,
+# we check if it's conflit with the combination that we found.
+# If they have intersection of characters, we skip it.
+# If not, we append this new combination to result.
+
+# return the maximum length from all combinations.
