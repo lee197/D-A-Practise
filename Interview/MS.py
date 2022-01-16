@@ -371,3 +371,96 @@ print(solution.sumZero(6))
 print(solution.sumZero(5))
 print(solution.sumZero(1))
 
+# Given an array of non-negative integers arr, you are initially positioned at start index of the array. When you are at index i, you can jump to i + arr[i] or i - arr[i], check if you can reach to any index with value 0.
+
+# Notice that you can not jump outside of the array at any time.
+
+ 
+
+# Example 1:
+
+# Input: arr = [4,2,3,0,3,1,2], start = 5
+# Output: true
+# Explanation: 
+# All possible ways to reach at index 3 with value 0 are: 
+# index 5 -> index 4 -> index 1 -> index 3 
+# index 5 -> index 6 -> index 4 -> index 1 -> index 3 
+# Example 2:
+
+# Input: arr = [4,2,3,0,3,1,2], start = 0
+# Output: true 
+# Explanation: 
+# One possible way to reach at index 3 with value 0 is: 
+# index 0 -> index 4 -> index 1 -> index 3
+# Example 3:
+
+# Input: arr = [3,0,2,1,2], start = 2
+# Output: false
+# Explanation: There is no way to reach at index 1 with value 0.
+ 
+
+# Constraints:
+
+# 1 <= arr.length <= 5 * 104
+# 0 <= arr[i] < arr.length
+# 0 <= start < arr.length
+
+# Similar to what we did in the above solution, we can do it using BFS as well. The only difference in these two would be that BFS would be equivalent to exploring all possible paths till now at once (meaning one move at a time in each path), while DFS is equivalent to exploring one path at a time till we either completely explore it or reach the target index.
+
+# We start by pushing the starting index into the queue and iteratively trying both possible jumps from indices in queue.
+
+# If we A[cur] 0, we can return true.
+# If we reach already visited index (A[cur] < 0), we discard further exploration of this path & continue to next element of queue
+# If current index is not visited and value is not equal to 0, further explore both possible jumps from this index by pushing both of it into queue (after proper bounds check).
+from collections import deque
+class Solution5:
+  def can_reach(self, arr, start):
+    q = deque([start])
+    while q:
+      cur = q.popLeft()
+      if arr[cur] == 0:
+        return True
+      if arr[cur] < 0: continue
+      if cur + arr[cur] < len(arr): q.append(cur + arr[cur])
+      if cur - arr[cur] >= 0: q.append(cur - arr[cur])
+
+      arr[cur] *= -1
+    return False
+
+
+
+# Given an array of meeting time intervals intervals where intervals[i] = [starti, endi], return the minimum number of conference rooms required.
+
+ 
+
+# Example 1:
+
+# Input: intervals = [[0,30],[5,10],[15,20]]
+# Output: 2
+# Example 2:
+
+# Input: intervals = [[7,10],[2,4]]
+# Output: 1
+ 
+
+# Constraints:
+
+# 1 <= intervals.length <= 104
+# 0 <= starti < endi <= 106
+from collections import heapq
+class Solution:
+    def minMeetingRooms(self, intervals):
+        
+        if not intervals:
+            return 0
+        
+        rooms = []
+        intervals.sort(key = lambda x: x[0])
+        heapq.heappush(rooms, intervals[0][1])
+        
+        for interval in intervals[1:]:
+            if rooms[0] <= interval[0]:
+                heapq.heappop(rooms)
+            heapq.heappush(rooms, interval[1])
+            
+        return len(rooms)
