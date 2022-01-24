@@ -431,8 +431,6 @@ class Solution5:
 
 # Given an array of meeting time intervals intervals where intervals[i] = [starti, endi], return the minimum number of conference rooms required.
 
- 
-
 # Example 1:
 
 # Input: intervals = [[0,30],[5,10],[15,20]]
@@ -441,7 +439,6 @@ class Solution5:
 
 # Input: intervals = [[7,10],[2,4]]
 # Output: 1
- 
 
 # Constraints:
 
@@ -450,17 +447,52 @@ class Solution5:
 from collections import heapq
 class Solution:
     def minMeetingRooms(self, intervals):
-        
         if not intervals:
             return 0
-        
+        # heap
         rooms = []
         intervals.sort(key = lambda x: x[0])
+        # heap is storing the end time.
         heapq.heappush(rooms, intervals[0][1])
         
         for interval in intervals[1:]:
+          # room[0] means the top of the heap 
+          # if both pop and push executed. that means no room. If pop not excuted, that menas new room added
             if rooms[0] <= interval[0]:
                 heapq.heappop(rooms)
             heapq.heappush(rooms, interval[1])
             
         return len(rooms)
+
+from collections import OrderedDict
+
+class LRUCache: 
+  od = OrderedDict()
+
+  def __init__(self, capacity):
+    self.capacity = capacity
+  
+  def get(self, key):
+    if key not in self.od:
+      return -1
+
+    self.od.move_to_end(key)
+    return self.od[key]
+  
+  def put(self, key, value):
+    self.od[key] = value
+    self.od.move_to_end(key)
+
+    if len(self.od) > self.capacity:
+      self.od.popitem(last = False)
+
+
+class Solutions: 
+  def groupAnagrams(self, strs):
+    d = {}
+
+    for w in strs:
+      key = tuple(sorted(w))
+      d[key] = d.get(key, []) + [w]
+    return d.values
+    
